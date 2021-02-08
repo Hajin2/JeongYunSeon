@@ -1,0 +1,6 @@
+﻿  Snake.cpp
+C:\Users\B-03\Downloads\Project13-2\Project13\MapDraw.h(13,17): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\B-03\Downloads\Project13-2\Project13\MapDraw.h(13,20): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\B-03\Downloads\Project13-2\Project13\Snake.cpp(76,6): warning C4996: 'kbhit': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _kbhit. See online help for details.
+C:\Users\B-03\Downloads\Project13-2\Project13\Snake.cpp(78,9): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  Project13.vcxproj -> C:\Users\B-03\Downloads\Project13-2\x64\Debug\Project13.exe
