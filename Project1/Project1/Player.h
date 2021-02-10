@@ -1,5 +1,7 @@
 #pragma once
 #include"Macro.h"
+#include"MapDraw.h"
+#include"Actor.h"
 
 struct PlayerInfo
 {
@@ -14,17 +16,18 @@ struct PlayerInfo
 	int m_iLevel;
 };
 
-class Player
+class Player : public Actor
 {
-protected:
-	PlayerInfo m_PInfo;
+private:
+	MapDraw m_MapDraw;
 
 public:
 	Player();
 	~Player();
+	void ShowInfo();
 	inline void InputName(string Name)
 	{
-		m_PInfo.m_strName = Name;
+		m_Info.Name = Name;
 	}
 };
 
