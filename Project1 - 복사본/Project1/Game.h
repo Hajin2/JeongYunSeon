@@ -1,9 +1,7 @@
 #pragma once
 #include"Macro.h"
 #include"MapDraw.h"
-#include"Actor.h"
-#include"Player.h"
-#include"Monster.h"
+#include"Character.h"
 
 enum MENU
 {
@@ -20,35 +18,34 @@ enum MAIN
 	MAIN_SAVE,
 	MAIN_EXIT
 };
-enum DG
+enum FILESTATE
 {
-	DG_GOBLIN = 1,
-	DG_ORC,
-	DG_WOLF,
-	DG_OGRE,
-	DG_SKELETON,
-	DG_LICH,
-	DG_EXIT
+	FS_SAVE,
+	FS_LOAD
 };
 class Game
 {
-protected:
-	bool m_bPlayState;
+private:
 	MapDraw m_MapDraw;
-	Player m_Player;
-	Monster m_Monster;
-	Actor* m_Actor;
+	Character *m_Monster;
+	Character *m_Player;
+	string m_strPlayerFile;
+	string m_strMonsterFile;
+	int m_iMonsterCount;
 
 public:
 	Game();
 	void Start();
+	bool Init(STARTTYPE StartType);
 	void TitleMenu();
-	void InputName();
 	void MainMenu();
 	void Main();
 	void DeonGeon();
 	void DeonGeonMenu();
-	void RPS();
+	void Fight(Character* Player, Character* Monster);
+	void Delete();
+	bool Load(STARTTYPE StartType);
+	bool FileList(FILESTATE State);
 	~Game();
 };
 
