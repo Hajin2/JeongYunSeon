@@ -70,6 +70,84 @@ void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 		ResetLife();
 	}
 }
+bool Character::ExpUp(Character& Enemy)
+{
+	int Num;
+	getch();
+	m_MapDraw.BoxErase(WIDTH, HEIGHT);
+	m_MapDraw.DrawMidText(m_Info.Name + " 승리!!", WIDTH, HEIGHT * 0.3);
+	m_MapDraw.DrawMidText(m_Info.Name + "가 경험치 " + to_string(Enemy.GetExp()) + "를 얻었습니다.", WIDTH, HEIGHT* 0.4);
+	m_Info.CurExp += Enemy.GetExp();
+	if (Enemy.GetType() == CH_PLAYER)
+		Enemy.ResetExp();
+	if (m_Info.CurExp >= m_Info.MaxExp)
+	{
+		getch();
+		LevelUp();
+	}
+	if (Enemy.GetType() == CH_PLAYER && Enemy.GetExp() == 0)
+	{
+		getch();
+		m_MapDraw.DrawMidText("Game Over", WIDTH, HEIGHT*0.5);
+		getch();
+		return false;
+	}
+
+	if (m_eType == CH_PLAYER)
+	{
+		m_Info.GetExp = m_Info.CurExp;
+		m_Info.Gold += Enemy.GetGold();
+	}
+	Enemy.ResetLife();
+	getch();
+	return true;
+}
+void Character::LevelUp()
+{
+	int Num;
+	PUPPLE
+		m_MapDraw.BoxErase(WIDTH, HEIGHT);
+	m_MapDraw.DrawMidText(m_Info.Name + "레벨업!!", WIDTH, HEIGHT*0.4);
+	Num = rand() % (UPATTACKSTAT + 1);
+	m_Info.Attack += Num;
+	m_MapDraw.DrawMidText("공격력 " + to_string(Num) + " 증가!!", WIDTH, HEIGHT*0.5);
+	Num = rand() % (UPLIFESTAT + 1);
+	m_Info.MaxLife += Num;
+	m_MapDraw.DrawMidText("생명력 " + to_string(Num) + " 증가!!", WIDTH, HEIGHT*0.6);
+	m_Info.CurExp = 0;
+	m_Info.MaxExp += m_Info.MaxExp * 0.3;
+	m_Info.Level++;
+	m_Info.CurLife = m_Info.MaxLife;
+	ORIGINAL
+}
+RPS Character::GetRPS()
+{
+	char ch;
+	if (m_eType == CH_MONSTER)
+		return (RPS)(rand() % RPS_END);
+	else if (m_eType == CH_PLAYER)
+	{
+		while (1)
+		{
+			ch = getch() - 49;
+			if (ch >= RPS_START && ch < RPS_END)
+				return (RPS)ch;
+		}
+	}
+}
+void Character::Attack(Character* Enemy)
+{
+	if (m_Weapon)
+		m_Weapon->Attack(m_Info.Attack, Enemy);
+	else
+		Enemy->Hit(m_Info.Attack);
+}
+void Character::Hit(int Attacked)
+{
+	m_Info.CurLife -= Attacked;
+	if (m_Info.CurLife < 0)
+		m_Info.CurLife = 0;
+}
 Character::~Character()
 {
 }

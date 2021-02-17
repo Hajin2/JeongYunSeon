@@ -32,7 +32,7 @@ private:
 	string m_strPlayerFile;
 	string m_strMonsterFile;
 	int m_iMonsterCount;
-
+	bool m_bGameExit;
 public:
 	Game();
 	void Start();
@@ -43,6 +43,7 @@ public:
 	void DeonGeon();
 	void DeonGeonMenu();
 	void Fight(Character* Player, Character* Monster);
+	void RPSDraw(RPS rps, int x, int y);
 	void Delete();
 	bool Load(STARTTYPE StartType);
 	bool FileList(FILESTATE State);
