@@ -2,6 +2,7 @@
 
 Game::Game()
 {
+	m_bGameExit = false;
 	m_Monster = NULL;
 	m_Player = NULL;
 	m_iMonsterCount = 0;
@@ -70,7 +71,7 @@ void Game::MainMenu()
 }
 void Game::Main()
 {
-	while (1)
+	while (!m_bGameExit)
 	{
 		system("cls");
 		BLUE;
@@ -84,10 +85,10 @@ void Game::Main()
 			break;
 		case MAIN_PLAYER:
 			YELLOW
-				m_MapDraw.BoxErase(WIDTH, HEIGHT);
+			m_MapDraw.BoxErase(WIDTH, HEIGHT);
 			m_Player->ShowInfo(WIDTH - 15, HEIGHT * 0.5);
 			ORIGINAL
-				getch();
+			getch();
 			break;
 		case MAIN_MONSTER:
 			m_MapDraw.BoxErase(WIDTH, HEIGHT);
@@ -97,43 +98,42 @@ void Game::Main()
 			getch();
 			break;
 		case MAIN_WEAPON:
+			m_Shop.ShopMenu(m_Player);
 			break;
 		case MAIN_SAVE:
+			Save();
 			break;
 		case MAIN_EXIT:
 			return;
 		}
 	}
+	m_bGameExit = false;
 }
 void Game::DeonGeon()
 {
-	while (1)
-	{
-		system("cls");
-		BLUE
-		m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
-		DeonGeonMenu();
-		int Select = m_MapDraw.MenuSelectCursor(7, 2, 6, 10);
-		if (Select == m_iMonsterCount + 1)
-			return;
-		else if (Select >= 1 && Select <= m_iMonsterCount)
-			Fight(m_Player, &m_Monster[Select - 1]);
-	}
+	system("cls");
+	BLUE
+	m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
+	DeonGeonMenu();
+	int Select = m_MapDraw.MenuSelectCursor(7, 2, 6, 10);
+	if (Select == m_iMonsterCount + 1)
+		return;
+	else if (Select >= 1 && Select <= m_iMonsterCount)
+		Fight(m_Player, &m_Monster[Select - 1]);
 }
 void Game::Fight(Character* Player, Character* Monster)
 {
-	bool GameEnd = false;
 	RPS PlayerRPS, MonsterRPS;
 	m_MapDraw.BoxErase(WIDTH, HEIGHT);
 	while (1)
 	{
 		YELLOW
-			Player->ShowInfo(WIDTH - 15, HEIGHT * 0.1);
+		Player->ShowInfo(WIDTH - 15, HEIGHT * 0.1);
 		m_MapDraw.DrawMidText("가위 : 1   바위 : 2   보 : 3", WIDTH, HEIGHT*0.3);
 		ORIGINAL
-			Monster->ShowInfo(WIDTH - 15, HEIGHT * 0.8);
+		Monster->ShowInfo(WIDTH - 15, HEIGHT * 0.8);
 		RED
-			m_MapDraw.DrawMidText("-------------------------- vs --------------------------", WIDTH, HEIGHT*0.5);
+		m_MapDraw.DrawMidText("-------------------------- vs --------------------------", WIDTH, HEIGHT*0.5);
 		if (Player->GetLife() == 0)
 		{
 			if (!Monster->ExpUp(*Player))
@@ -148,48 +148,65 @@ void Game::Fight(Character* Player, Character* Monster)
 		PlayerRPS = Player->GetRPS();
 		m_MapDraw.BoxErase(WIDTH, HEIGHT);
 		YELLOW
-			RPSDraw(PlayerRPS, WIDTH, HEIGHT*0.4);
+		RPSDraw(PlayerRPS, WIDTH, HEIGHT*0.4);
 		MonsterRPS = Monster->GetRPS();
 		ORIGINAL
-			RPSDraw(MonsterRPS, WIDTH, HEIGHT*0.65);
+		RPSDraw(MonsterRPS, WIDTH, HEIGHT*0.65);
 		RED
-			if (PlayerRPS > MonsterRPS)
+		if (PlayerRPS > MonsterRPS)
+		{
+			if (PlayerRPS == RPS_PAPER && MonsterRPS == RPS_SCISSOR)
 			{
-				if (PlayerRPS == RPS_PAPER && MonsterRPS == RPS_SCISSOR)
-				{
-					m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.6);
-					m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.45);
-					Monster->Attack(Player);
-				}
-				else
-				{
-					m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.45);
-					m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.6);
-					Player->Attack(Monster);
-				}
-			}
-			else if (PlayerRPS < MonsterRPS)
-			{
-				if (PlayerRPS == RPS_SCISSOR && MonsterRPS == RPS_PAPER)
-				{
-					m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.45);
-					m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.6);
-					Player->Attack(Monster);
-				}
-				else
-				{
-					m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.6);
-					m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.45);
-					Monster->Attack(Player);
-				}
+				m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.6);
+				m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.45);
+				Monster->Attack(Player);
 			}
 			else
 			{
-				m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.45);
-				m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.6);
+				m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.45);
+				m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.6);
+				Player->Attack(Monster);
 			}
+		}
+		else if (PlayerRPS < MonsterRPS)
+		{
+			if (PlayerRPS == RPS_SCISSOR && MonsterRPS == RPS_PAPER)
+			{
+				m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.45);
+				m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.6);
+				Player->Attack(Monster);
+			}
+			else
+			{
+				m_MapDraw.DrawMidText("Win", WIDTH, HEIGHT*0.6);
+				m_MapDraw.DrawMidText("Lose", WIDTH, HEIGHT*0.45);
+				Monster->Attack(Player);
+			}
+		}
+		else
+		{
+			m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.45);
+			m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.6);
+		}
 		ORIGINAL
-
+	}
+}
+void Game::RPSDraw(RPS rps, int x, int y)
+{
+	m_MapDraw.DrawMidText("        ", x, y);
+	switch (rps)
+	{
+	case RPS_ROCK:
+		m_MapDraw.DrawMidText("바위", x, y);
+		break;
+	case RPS_SCISSOR:
+		m_MapDraw.DrawMidText("가위", x, y);
+		break;
+	case RPS_PAPER:
+		m_MapDraw.DrawMidText("보", x, y);
+		break;
+	default:
+		break;
 	}
 }
 void Game::DeonGeonMenu()
@@ -203,6 +220,18 @@ void Game::DeonGeonMenu()
 	m_MapDraw.DrawMidText("5층 던전: [스켈레톤아처]", WIDTH, 18);
 	m_MapDraw.DrawMidText("6층 던전: [리치]", WIDTH, 20);
 	m_MapDraw.DrawMidText("돌아가기", WIDTH, 22);
+}
+void Game::Save()
+{
+	FileList(FS_SAVE);
+	ofstream Save;
+	Save.open(m_strPlayerFile);
+	m_Player->Save(Save);
+	Save.close();
+	Save.open(m_strMonsterFile);
+	Save << m_iMonsterCount << endl;
+	for (int i = 0; i < m_iMonsterCount; i++)
+		m_Monster[i].Save(Save);
 }
 bool Game::Load(STARTTYPE StartType)
 {

@@ -2,6 +2,7 @@
 
 Character::Character()
 {
+	m_Weapon = NULL;
 }
 void Character::ShowInfo(int x, int y)
 {
@@ -49,7 +50,7 @@ void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 				Load >> strtmp;
 				Load >> strName;
 				Load >> iDamage;
-				/*if (strtmp == "´ë°Å")
+				if (strtmp == "´ë°Å")
 					m_Weapon = new Dagger(strName, iDamage, iGold);
 				else if (strtmp == "ÃÑ")
 					m_Weapon = new Gun(strName, iDamage, iGold);
@@ -60,7 +61,7 @@ void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 				else if (strtmp == "È°")
 					m_Weapon = new Bow(strName, iDamage, iGold);
 				else if (strtmp == "¸ÁÄ¡")
-					m_Weapon = new Hammer(strName, iDamage, iGold);*/
+					m_Weapon = new Hammer(strName, iDamage, iGold);
 			}
 		}
 	}
@@ -137,7 +138,7 @@ RPS Character::GetRPS()
 }
 void Character::Attack(Character* Enemy)
 {
-	if (m_Weapon)
+	if (m_Weapon != NULL)
 		m_Weapon->Attack(m_Info.Attack, Enemy);
 	else
 		Enemy->Hit(m_Info.Attack);
@@ -148,7 +149,35 @@ void Character::Hit(int Attacked)
 	if (m_Info.CurLife < 0)
 		m_Info.CurLife = 0;
 }
+void Character::Save(ofstream& Save)
+{
+	Save << m_Info.Name << " ";
+	Save << m_Info.Attack << " ";
+	Save << m_Info.MaxLife << " ";
+	Save << m_Info.MaxExp << " ";
+	Save << m_Info.GetExp << " ";
+	Save << m_Info.Level << " ";
+	Save << m_Info.Gold << " ";
+	Save << m_Info.CurExp << " ";
+	Save << m_Info.CurLife << endl;
+	if (m_eType == CH_PLAYER)
+	{
+		if (m_Weapon)
+		{
+			Save << 1;
+			m_Weapon->Save(Save);
+		}
+		else
+			Save << 0;
+	}
+
+}
+void Character::Buy(Weapon* weapon)
+{
+	m_Weapon = weapon;
+	m_Info.Gold -= weapon->GetGold();
+}
 Character::~Character()
 {
+	DeleteWeapon();
 }
-

@@ -2,6 +2,7 @@
 #include"Macro.h"
 #include"MapDraw.h"
 #include"Character.h"
+#include"Shop.h"
 
 enum MENU
 {
@@ -31,6 +32,7 @@ private:
 	Character *m_Player;
 	string m_strPlayerFile;
 	string m_strMonsterFile;
+	Shop m_Shop;
 	int m_iMonsterCount;
 	bool m_bGameExit;
 public:
@@ -45,6 +47,7 @@ public:
 	void Fight(Character* Player, Character* Monster);
 	void RPSDraw(RPS rps, int x, int y);
 	void Delete();
+	void Save();
 	bool Load(STARTTYPE StartType);
 	bool FileList(FILESTATE State);
 	~Game();

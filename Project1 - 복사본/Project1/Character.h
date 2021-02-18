@@ -48,6 +48,8 @@ public:
 	void LevelUp();
 	void Attack(Character* Enemy);
 	void Hit(int Attacked);
+	void Save(ofstream& Save);
+	void Buy(Weapon *weapon);
 	RPS GetRPS();
 	inline void ResetExp()
 	{
@@ -57,6 +59,11 @@ public:
 	inline void ResetLife()
 	{
 		m_Info.CurLife = m_Info.MaxLife;
+	}
+	inline void DeleteWeapon()
+	{
+		if (m_Weapon)
+			delete m_Weapon;
 	}
 	inline int GetExp()
 	{
