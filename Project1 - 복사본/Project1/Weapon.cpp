@@ -2,6 +2,7 @@
 
 Weapon::Weapon()
 {
+	m_iGold = 0;
 }
 
 void Weapon::Save(ofstream& Save)
@@ -27,7 +28,7 @@ void Weapon::Save(ofstream& Save)
 		Save << "망치";
 		break;
 	}
-	Save << m_strName << " " << m_iDamage << " " << m_iGold;
+	Save << " " << m_strName << " " << m_iDamage << " " << m_iGold;
 }
 void Weapon::ShowShopInfo(int x, int y)
 {
@@ -83,7 +84,7 @@ void Weapon::ShowInfo(int x, int y)
 		break;
 	}
 	YELLOW
-		m_MapDraw.DrawMidText("무기타입 : " + Type + " 무기이름 : " + m_strName + " 공격력 : " + to_string(m_iDamage), x, y);
+	m_MapDraw.DrawMidText("무기타입 : " + Type + " 무기이름 : " + m_strName + " 공격력 : " + to_string(m_iDamage), x, y);
 	ORIGINAL
 }
 
@@ -320,7 +321,7 @@ Hammer::Hammer(string Name, int Damage, int Gold)
 	m_strName = Name;
 	m_iDamage = Damage;
 	m_iGold = Gold;
-	m_eType = WP_WAND;
+	m_eType = WP_HAMMER;
 }
 
 Hammer::~Hammer()

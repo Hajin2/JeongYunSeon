@@ -14,6 +14,10 @@ void Character::ShowInfo(int x, int y)
 	cout << "경험치 = " << m_Info.CurExp << "/" << m_Info.MaxExp << "\tGetEXP : " << m_Info.GetExp << endl;
 	m_MapDraw.gotoxy(x, y + 3);
 	cout << "Gold = " << m_Info.Gold << endl;
+	if (m_Weapon != NULL)
+	{
+		m_Weapon->ShowInfo(x - 8, y + 4);
+	}
 }
 void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 {
@@ -26,7 +30,7 @@ void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 	if (m_eType == CH_PLAYER && StartType == STARTTYPE_NEWSTART)
 	{
 		YELLOW
-			m_MapDraw.DrawMidText("Player 이름 입력 : ", WIDTH, HEIGHT*0.5);
+		m_MapDraw.DrawMidText("Player 이름 입력 : ", WIDTH, HEIGHT*0.5);
 		cin >> m_Info.Name;
 		ORIGINAL
 	}
@@ -50,6 +54,7 @@ void Character::SetInfo(ifstream& Load, CHARACTER Type, STARTTYPE StartType)
 				Load >> strtmp;
 				Load >> strName;
 				Load >> iDamage;
+				Load >> iGold;
 				if (strtmp == "대거")
 					m_Weapon = new Dagger(strName, iDamage, iGold);
 				else if (strtmp == "총")

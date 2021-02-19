@@ -13,11 +13,11 @@ void Game::Start()
 	char buf[256];
 	sprintf(buf, "mode con: lines=%d cols=%d", HEIGHT + 1, 2 * WIDTH + 1);
 	system(buf);
+	BLUE
+	m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
 	while (1)
 	{
-		system("cls");
-		BLUE
-		m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
+		m_MapDraw.BoxErase(WIDTH, HEIGHT);
 		TitleMenu();
 		switch (m_MapDraw.MenuSelectCursor(3, 3, 10, 12))
 		{
@@ -26,7 +26,7 @@ void Game::Start()
 				Main();
 			break;
 		case MENU_LOAD:
-			if (STARTTYPE_LOADSTART)
+			if (Init(STARTTYPE_LOADSTART))
 				Main();
 			break;
 		case MENU_EXIT:
@@ -74,7 +74,7 @@ void Game::Main()
 	while (!m_bGameExit)
 	{
 		system("cls");
-		BLUE;
+		BLUE
 		m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
 		MainMenu();
 		int y;
@@ -240,7 +240,7 @@ bool Game::Load(STARTTYPE StartType)
 	Load.open(m_strPlayerFile);
 	if (!Load.is_open())
 	{
-		cout << "Player정보 없음" << endl;
+		cout << "Player 정보 없음" << endl;
 		return false;
 	}
 	m_Player = new Character;
@@ -249,7 +249,7 @@ bool Game::Load(STARTTYPE StartType)
 	Load.open(m_strMonsterFile);
 	if (!Load.is_open())
 	{
-		cout << "Monster정보 없음" << endl;
+		cout << "Monster 정보 없음" << endl;
 		return false;
 	}
 	Load >> m_iMonsterCount;
@@ -261,6 +261,65 @@ bool Game::Load(STARTTYPE StartType)
 }
 bool Game::FileList(FILESTATE State)
 {
+	int Select, i;
+	ifstream F1, F2;
+	char buf[256], ch;
+	bool FileState[10];
+	while (1)
+	{
+		GREEN
+			m_MapDraw.BoxErase(WIDTH, HEIGHT);
+		for (i = 1; i <= 10; i++)
+		{
+			sprintf(buf, "SavePlayer%d.txt", i);
+			F1.open(buf);
+			sprintf(buf, "SaveMonster%d.txt", i);
+			F2.open(buf);
+			if (F1.is_open() && F2.is_open())
+			{
+				ch = 'O';
+				FileState[i - 1] = true;
+			}
+			else
+			{
+				ch = 'X';
+				FileState[i - 1] = false;
+			}
+			sprintf(buf, "%d번슬롯 : (파일여부 : %c)", i, ch);
+			m_MapDraw.DrawMidText((string)buf, WIDTH, HEIGHT* 0.1 + i * 2);
+			F1.close();
+			F2.close();
+		}
+		m_MapDraw.DrawMidText("11.돌아가기             ", WIDTH, HEIGHT* 0.1 + i++ * 2);
+		Select = m_MapDraw.MenuSelectCursor(11, 2, (WIDTH - strlen(buf) / 2 - 3) / 2, HEIGHT* 0.1 + 2);
+		m_MapDraw.BoxErase(WIDTH, HEIGHT);
+		string str;
+		if (State == FS_SAVE)
+			str = "Save 완료";
+		else if (State == FS_LOAD)
+			str = "Load 완료";
+		ORIGINAL
+			if (Select >= 1 && Select <= 10)
+			{
+				if ((State == FS_LOAD && FileState[Select - 1]) || State == FS_SAVE)
+				{
+					sprintf(buf, "SavePlayer%d.txt", Select);
+					m_strPlayerFile = buf;
+					sprintf(buf, "SaveMonster%d.txt", Select);
+					m_strMonsterFile = buf;
+					m_MapDraw.DrawMidText(str, WIDTH, HEIGHT*0.5);
+					getch();
+					return true;
+				}
+				else
+					m_MapDraw.DrawMidText("해당 파일이 없습니다.", WIDTH, HEIGHT*0.5);
+			}
+			else if (Select == 11)
+				return false;
+		m_MapDraw.gotoxy(WIDTH / 2, HEIGHT*0.5 + 1);
+		system("pause");
+	}
+	ORIGINAL
 	return false;
 }
 void Game::Delete()
