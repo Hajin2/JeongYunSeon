@@ -115,7 +115,7 @@ void Game::DeonGeon()
 	BLUE
 	m_MapDraw.BoxDraw(0, 0, WIDTH, HEIGHT);
 	DeonGeonMenu();
-	int Select = m_MapDraw.MenuSelectCursor(7, 2, 6, 10);
+	int Select = m_MapDraw.MenuSelectCursor(7, 2, 6, 9);
 	if (Select == m_iMonsterCount + 1)
 		return;
 	else if (Select >= 1 && Select <= m_iMonsterCount)
@@ -127,12 +127,12 @@ void Game::Fight(Character* Player, Character* Monster)
 	m_MapDraw.BoxErase(WIDTH, HEIGHT);
 	while (1)
 	{
-		YELLOW
+		YELLOW;
 		Player->ShowInfo(WIDTH - 15, HEIGHT * 0.1);
 		m_MapDraw.DrawMidText("가위 : 1   바위 : 2   보 : 3", WIDTH, HEIGHT*0.3);
-		ORIGINAL
+		ORIGINAL;
 		Monster->ShowInfo(WIDTH - 15, HEIGHT * 0.8);
-		RED
+		RED;
 		m_MapDraw.DrawMidText("-------------------------- vs --------------------------", WIDTH, HEIGHT*0.5);
 		if (Player->GetLife() == 0)
 		{
@@ -147,10 +147,10 @@ void Game::Fight(Character* Player, Character* Monster)
 		}
 		PlayerRPS = Player->GetRPS();
 		m_MapDraw.BoxErase(WIDTH, HEIGHT);
-		YELLOW
+		YELLOW;
 		RPSDraw(PlayerRPS, WIDTH, HEIGHT*0.4);
 		MonsterRPS = Monster->GetRPS();
-		ORIGINAL
+		ORIGINAL;
 		RPSDraw(MonsterRPS, WIDTH, HEIGHT*0.65);
 		RED
 		if (PlayerRPS > MonsterRPS)
@@ -188,7 +188,7 @@ void Game::Fight(Character* Player, Character* Monster)
 			m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.45);
 			m_MapDraw.DrawMidText("Draw", WIDTH, HEIGHT*0.6);
 		}
-		ORIGINAL
+		ORIGINAL;
 	}
 }
 void Game::RPSDraw(RPS rps, int x, int y)
@@ -211,15 +211,17 @@ void Game::RPSDraw(RPS rps, int x, int y)
 }
 void Game::DeonGeonMenu()
 {
-	BLOOD
+	char buf[256];
+	int y = HEIGHT * 0.5 - (m_iMonsterCount / 2) * 2;
+	int i;
+	BLOOD;
 	m_MapDraw.DrawMidText("=====던전 입구=====", WIDTH, 5);
-	m_MapDraw.DrawMidText("1층 던전: [고블린]", WIDTH, 10);
-	m_MapDraw.DrawMidText("2층 던전: [오크]", WIDTH, 12);
-	m_MapDraw.DrawMidText("3층 던전: [늑대인간]", WIDTH, 14);
-	m_MapDraw.DrawMidText("4층 던전: [오우거]", WIDTH, 16);
-	m_MapDraw.DrawMidText("5층 던전: [스켈레톤아처]", WIDTH, 18);
-	m_MapDraw.DrawMidText("6층 던전: [리치]", WIDTH, 20);
-	m_MapDraw.DrawMidText("돌아가기", WIDTH, 22);
+	for (i = 0; i < m_iMonsterCount; i++)
+	{
+		sprintf(buf, "%d층 던전: [%s]", i + 1, m_Monster[i].GetName().c_str());
+		m_MapDraw.DrawMidText(buf, WIDTH, y + i * 2);
+	}
+	m_MapDraw.DrawMidText("돌아가기", WIDTH, y + i * 2);
 }
 void Game::Save()
 {
