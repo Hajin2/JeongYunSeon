@@ -152,7 +152,7 @@ void Game::Fight(Character* Player, Character* Monster)
 		MonsterRPS = Monster->GetRPS();
 		ORIGINAL;
 		RPSDraw(MonsterRPS, WIDTH, HEIGHT*0.65);
-		RED
+		RED;
 		if (PlayerRPS > MonsterRPS)
 		{
 			if (PlayerRPS == RPS_PAPER && MonsterRPS == RPS_SCISSOR)
@@ -269,8 +269,8 @@ bool Game::FileList(FILESTATE State)
 	bool FileState[10];
 	while (1)
 	{
-		GREEN
-			m_MapDraw.BoxErase(WIDTH, HEIGHT);
+		GREEN;
+		m_MapDraw.BoxErase(WIDTH, HEIGHT);
 		for (i = 1; i <= 10; i++)
 		{
 			sprintf(buf, "SavePlayer%d.txt", i);
@@ -300,24 +300,24 @@ bool Game::FileList(FILESTATE State)
 			str = "Save 완료";
 		else if (State == FS_LOAD)
 			str = "Load 완료";
-		ORIGINAL
-			if (Select >= 1 && Select <= 10)
+		ORIGINAL;
+		if (Select >= 1 && Select <= 10)
+		{
+			if ((State == FS_LOAD && FileState[Select - 1]) || State == FS_SAVE)
 			{
-				if ((State == FS_LOAD && FileState[Select - 1]) || State == FS_SAVE)
-				{
-					sprintf(buf, "SavePlayer%d.txt", Select);
-					m_strPlayerFile = buf;
-					sprintf(buf, "SaveMonster%d.txt", Select);
-					m_strMonsterFile = buf;
-					m_MapDraw.DrawMidText(str, WIDTH, HEIGHT*0.5);
-					getch();
-					return true;
-				}
-				else
-					m_MapDraw.DrawMidText("해당 파일이 없습니다.", WIDTH, HEIGHT*0.5);
+				sprintf(buf, "SavePlayer%d.txt", Select);
+				m_strPlayerFile = buf;
+				sprintf(buf, "SaveMonster%d.txt", Select);
+				m_strMonsterFile = buf;
+				m_MapDraw.DrawMidText(str, WIDTH, HEIGHT*0.5);
+				getch();
+				return true;
 			}
-			else if (Select == 11)
-				return false;
+			else
+				m_MapDraw.DrawMidText("해당 파일이 없습니다.", WIDTH, HEIGHT*0.5);
+		}
+		else if (Select == 11)
+			return false;
 		m_MapDraw.gotoxy(WIDTH / 2, HEIGHT*0.5 + 1);
 		system("pause");
 	}

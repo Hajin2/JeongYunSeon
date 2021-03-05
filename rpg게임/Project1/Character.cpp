@@ -111,8 +111,8 @@ bool Character::ExpUp(Character& Enemy)
 void Character::LevelUp()
 {
 	int Num;
-	PUPPLE
-		m_MapDraw.BoxErase(WIDTH, HEIGHT);
+	PUPPLE;
+	m_MapDraw.BoxErase(WIDTH, HEIGHT);
 	m_MapDraw.DrawMidText(m_Info.Name + "·¹º§¾÷!!", WIDTH, HEIGHT*0.4);
 	Num = rand() % (UPATTACKSTAT + 1);
 	m_Info.Attack += Num;
