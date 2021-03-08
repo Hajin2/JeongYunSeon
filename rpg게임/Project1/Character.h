@@ -62,7 +62,7 @@ public:
 	}
 	inline void DeleteWeapon()
 	{
-		if (m_Weapon)
+		if (m_Weapon != NULL)
 			delete m_Weapon;
 	}
 	inline int GetExp()

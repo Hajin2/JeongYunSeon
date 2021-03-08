@@ -36,7 +36,6 @@ void Game::Start()
 }
 bool Game::Init(STARTTYPE StartType)
 {
-	Delete();
 	switch (StartType)
 	{
 	case STARTTYPE_NEWSTART:
@@ -326,9 +325,9 @@ bool Game::FileList(FILESTATE State)
 }
 void Game::Delete()
 {
-	if (m_Monster)
+	if (m_Monster != NULL)
 		delete[] m_Monster;
-	if (m_Player)
+	if (m_Player != NULL)
 		delete m_Player;
 }
 Game::~Game()
