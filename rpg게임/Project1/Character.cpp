@@ -86,7 +86,7 @@ bool Character::ExpUp(Character& Enemy)
 	m_Info.CurExp += Enemy.GetExp();
 	if (Enemy.GetType() == CH_PLAYER)
 		Enemy.ResetExp();
-	if (m_Info.CurExp >= m_Info.MaxExp)
+	if (m_Info.CurExp >= m_Info.MaxExp && Enemy.GetType() == CH_MONSTER)
 	{
 		getch();
 		LevelUp();
@@ -113,7 +113,7 @@ void Character::LevelUp()
 	int Num;
 	PUPPLE;
 	m_MapDraw.BoxErase(WIDTH, HEIGHT);
-	m_MapDraw.DrawMidText(m_Info.Name + "레벨업!!", WIDTH, HEIGHT*0.4);
+	m_MapDraw.DrawMidText(m_Info.Name + " 레벨업!!", WIDTH, HEIGHT*0.4);
 	Num = rand() % (UPATTACKSTAT + 1);
 	m_Info.Attack += Num;
 	m_MapDraw.DrawMidText("공격력 " + to_string(Num) + " 증가!!", WIDTH, HEIGHT*0.5);
@@ -124,7 +124,7 @@ void Character::LevelUp()
 	m_Info.MaxExp += m_Info.MaxExp * 0.3;
 	m_Info.Level++;
 	m_Info.CurLife = m_Info.MaxLife;
-	ORIGINAL
+	ORIGINAL;
 }
 RPS Character::GetRPS()
 {
