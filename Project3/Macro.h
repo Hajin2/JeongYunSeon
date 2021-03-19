@@ -27,3 +27,4 @@ using namespace std;
 //////////////////////////////////////////////////////
 #define WIDTH 65
 #define HEIGHT 35
+#define NAMESIZE 10

@@ -54,7 +54,7 @@ public:
 	Interface();
 	void SelectColor(COLOR color);
 	void BoxDraw(COLOR color);
-	void SmallBoxDraw(string str);
+	void SmallBoxDraw(string str = "");
 	void StoryDraw();
 	void TitleDraw();
 	void StageDraw(int stage);
@@ -63,6 +63,8 @@ public:
 	void SetNameDraw();
 	void ScoreDraw(int score);
 	void LifeDraw(int life, int maxlife);
+	void NameDraw(string name);
+	void EraseScore();
 	inline MapDraw GetDrawManager()
 	{
 		return m_DrawManager;

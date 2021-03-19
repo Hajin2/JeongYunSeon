@@ -177,6 +177,48 @@ KEY Interface::Typing(string &str, bool state)
 	return KEY_NON;
 }
 
+void Interface::SetNameDraw()
+{
+	m_DrawManager.BoxErase(WIDTH, HEIGHT);
+	m_DrawManager.DrawMidText("이름 입력", WIDTH, HEIGHT* 0.6);
+	SmallBoxDraw();
+}
+
+void Interface::ScoreDraw(int score)
+{
+	SelectColor(COLOR_RED);
+	m_DrawManager.DrawMidText("Score : " + to_string(score), m_ScorePos.m_ix, m_ScorePos.m_iy);
+	ORIGINAL;
+}
+
+void Interface::LifeDraw(int life, int maxlife)
+{
+	string str;
+	SelectColor(COLOR_RED);
+	str += "Life : ";
+	for (int i = 0; i < maxlife; i++)
+	{
+		if (i < life)
+			str += "♥";
+		else
+			str += "  ";
+	}
+	m_DrawManager.TextDraw(str, m_LifePos.m_ix, m_LifePos.m_iy);
+	ORIGINAL;
+}
+
+void Interface::EraseScore()
+{
+	m_DrawManager.DrawMidText("                       ", m_ScorePos.m_ix, m_ScorePos.m_iy);
+}
+
+void Interface::NameDraw(string name)
+{
+	SelectColor(COLOR_RED);
+	m_DrawManager.DrawRightText("Name : " + name + AddString(" ", NAMESIZE - name.length()), m_NamePos.m_ix, m_NamePos.m_iy);
+	ORIGINAL;
+}
+
 Interface::~Interface()
 {
 	delete[] m_strStoryList;
