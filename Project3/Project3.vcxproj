@@ -143,6 +143,7 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="MapDraw.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Word.cpp" />
     <ClCompile Include="WordManager.cpp" />
     <ClCompile Include="소스.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="Macro.h" />
     <ClInclude Include="MapDraw.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Word.h" />
     <ClInclude Include="WordManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

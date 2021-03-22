@@ -54,7 +54,9 @@ void GameManager::Game()
 		while (1)
 		{
 			BLUE;
-			if()
+			if (m_Player.SetWord())
+			{
+			}
 		}
 	}
 }

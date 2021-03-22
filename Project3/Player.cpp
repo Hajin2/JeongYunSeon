@@ -10,9 +10,7 @@ void Player::SetName()
 	BLUE;
 	m_Interface.SetNameDraw();
 	m_strName = "";
-	while (WordTyping(m_strName, NAMEMAX) != KEY_ENTER)
-	{
-	}
+	while (WordTyping(m_strName, NAMEMAX) != KEY_ENTER) {}
 	m_Interface.NameDraw(m_strName);
 }
 
@@ -57,6 +55,24 @@ KEY Player::WordTyping(string& str, int limit)
 	}
 	return KEY_NON;
 }
+
+bool Player::SetWord()
+{
+	if (WordTyping(m_strCompareWord, WORDMAX) == KEY_ENTER)
+		return true;
+	if (!m_bCompareState)
+	{
+		m_iCurClock = clock();
+		if (m_iCurClock - m_iFailClock >= DONTTYPING)
+		{
+			m_bCompareState = true;
+			m_Interface.GetDrawManager().DrawMidText(m_Interface.AddString(" ", m_strFailString.length() + 1), WIDTH, HEIGHT*0.7 + 2);
+			m_strCompareWord = "";
+		}
+	}
+	return false;
+}
+
 Player::~Player()
 {
 }
